@@ -1,0 +1,30 @@
+    _t1 = 0
+    a = _t1
+    _t2 = a
+    _t3 = 17
+    _t4 = _t2 + _t3
+    goto label1
+label4:
+    _t5 = 11
+    b = _t5
+    goto label2
+label5:
+    _t6 = 12
+    b = _t6
+    goto label2
+label6:
+    _t7 = 13
+    b = _t7
+    goto label2
+label3:
+    _t8 = 100
+    b = _t8
+    goto label2
+label1:
+    case _t4 1 label4 /* this is a synonym for: if _t4 == 1 goto label4 */
+    case _t4 2 label5
+    case _t4 3 label6
+    case _t4 _t4 label3 /* this is a synonym for: if _t4 == _t4 goto label3
+                           which has the same effect as: goto label3 */ 
+label2:
+    halt

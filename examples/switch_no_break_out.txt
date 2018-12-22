@@ -1,0 +1,28 @@
+    _t1 = 0
+    a = _t1
+    _t2 = a
+    _t3 = 17
+    _t4 = _t2 + _t3
+    goto label1
+label4:
+    _t5 = 5
+    b = _t5
+    goto label2
+label5:
+    _t6 = 10
+    b = _t6
+label6:
+    _t7 = 12
+    b = _t7
+    goto label2
+label3:
+    _t8 = 100
+    b = _t8
+    goto label2
+label1:
+    case _t4 5 label4
+    case _t4 10 label5
+    case _t4 12 label6
+    case _t4 _t4 label3
+label2:
+    halt
