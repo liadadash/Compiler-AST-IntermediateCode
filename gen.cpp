@@ -279,7 +279,51 @@ void Block::genStmt()
 
 void SwitchStmt::genStmt()
 { 
-    /* not implemented yet; */
+	int result = _exp->genExp ();
+	
+	//if(result == -1)
+	//{
+	//	errorMsg ("line %d: bool expression is not INT\n", _line);
+	//	return;
+	//}
+	
+	int condlabel = newlabel ();
+	int exitlabel = newlabel ();
+	int defaultlabel= newlabel ();
+
+	emit ("goto label%d\n", condlabel);
+	
+	Case *currentCase = _caselist;
+	
+	while(currentCase != NULL)
+	{
+		currentCase->_label = newlabel ();
+		emitlabel(currentCase->_label);
+		currentCase->_stmt->genStmt();
+		if(currentCase->_hasBreak)
+			emit ("goto label%d\n", exitlabel);
+		currentCase = currentCase->_next;
+	}
+	
+	emitlabel(defaultlabel);
+	
+	_default_stmt->genStmt();
+	
+	emit ("goto label%d\n", exitlabel);
+	
+	emitlabel(condlabel);
+	
+	currentCase = _caselist;
+	
+	while(currentCase != NULL)
+	{
+		emit ("case _t%d %d label%d\n", result, currentCase->_number, currentCase->_label);
+		currentCase = currentCase->_next;
+	}
+	
+	emit ("case _t%d _t%d label%d\n", result, result, defaultlabel);
+	
+	emitlabel(exitlabel);
 }
 
 void BreakStmt::genStmt()
@@ -296,9 +340,7 @@ void ForStmt::genStmt()
 	
 	emitlabel(condlabel);
 	_condition->genBoolExp (FALL_THROUGH, exitlabel);
-	
-
-	
+		
 	_body->genStmt ();
 	
 	_afterStep->genStmt ();

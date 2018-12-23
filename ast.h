@@ -199,8 +199,8 @@ public:
 
      BoolExp *_condition;
 	 Stmt *_body;
-	 AssignStmt *_init;
-	 AssignStmt*_afterStep;
+	 Stmt *_init;
+	 Stmt*_afterStep;
 };
 
 //  a block contains a list of statements. For now -- no declarations in a block
@@ -228,14 +228,15 @@ public:
           _stmt = stmt;
 		  _hasBreak = hasBreak;
           _next = NULL;
-          /*_label = -1; */ // will be set when code is generated
+          _label = -1;  // will be set when code is generated
       }
+
 
       int _number;
 	  Stmt *_stmt;
 	  bool _hasBreak; 
 	  Case *_next;
-      /* int _label; */ 
+      int _label;
 };
 
 class SwitchStmt : public Stmt {
