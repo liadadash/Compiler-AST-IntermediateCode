@@ -287,5 +287,23 @@ void BreakStmt::genStmt()
 	/* not implemented yet; */	
 }
 
+void ForStmt::genStmt()
+{
+	_init->genStmt ();
+	
+    int condlabel = newlabel ();
+	int exitlabel = newlabel ();
+	
+	emitlabel(condlabel);
+	_condition->genBoolExp (FALL_THROUGH, exitlabel);
+	
 
+	
+	_body->genStmt ();
+	
+	_afterStep->genStmt ();
+		
+	emit ("goto label%d\n", condlabel);
+	emitlabel(exitlabel);
+}
 

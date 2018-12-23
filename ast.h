@@ -189,6 +189,20 @@ public:
 	 Stmt *_body;
 };
 
+class ForStmt: public Stmt {
+public: 
+     ForStmt ( AssignStmt *init, BoolExp *condition, Stmt *body, AssignStmt *afterStep)
+	          : Stmt ()
+	          { _condition = condition; _body = body; _init = init; _afterStep = afterStep;}
+
+	 void genStmt (); // override			  
+
+     BoolExp *_condition;
+	 Stmt *_body;
+	 AssignStmt *_init;
+	 AssignStmt*_afterStep;
+};
+
 //  a block contains a list of statements. For now -- no declarations in a block
 class Block: public Stmt {
 public:

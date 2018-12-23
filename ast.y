@@ -44,6 +44,7 @@ int errors;
    Exp  *exp;
    BoolExp *boolexp;
    bool hasBreak;
+   ForStmt *for_stmt;
 }
 
 %token <ival> INT_NUM
@@ -68,6 +69,7 @@ int errors;
 %type <mycase> case
 %type <hasBreak> optional_break;
 %type <break_stmt> break_stmt
+%type <for_stmt> for_stmt
 
 %left FAND
 %left OR
@@ -99,7 +101,7 @@ stmt       :  assign_stmt { $$ = $1; } |
               /* write_stmt | */
 			  while_stmt  { $$ = $1; } |
 	          if_stmt     { $$ = $1; } |
-			  for_stmt    { $$ = 0;  } | /* not implemented yet */
+			  for_stmt    { $$ = $1; } |
 			  switch_stmt { $$ = $1; } |
 			  break_stmt  { $$ = $1; } |
 			  block       { $$ = $1; } ;
@@ -116,7 +118,7 @@ while_stmt :  WHILE '(' boolexp ')' stmt { $$ = new WhileStmt ($3, $5); };
 
 if_stmt    :  IF '(' boolexp ')' stmt ELSE stmt { $$ = new IfStmt ($3, $5, $7); };
 
-for_stmt   :  FOR '(' assign_stmt boolexp ';' assign_stmt ')' stmt
+for_stmt   :  FOR '(' assign_stmt boolexp ';' assign_stmt ')' stmt { $$ = new ForStmt ($3, $4, $8, $6); };
 										   
 											   
 switch_stmt : SWITCH '(' expression ')' '{' caselist DEFAULT ':' stmt '}' { $$ = new SwitchStmt ($3, $6, $9, @1.first_line); };
