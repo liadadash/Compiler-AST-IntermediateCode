@@ -38,7 +38,7 @@ void poplabel ()
 	if(!exitlabels.empty())
 		exitlabels.pop();
 	else
-		errorMsg ("Error pop exit label\n");
+		errorMsg ("Error pop of exitlabels not in loop or switch\n");
 } 
 
 // emit works just like  printf  --  we use emit 
@@ -94,16 +94,29 @@ opName (enum op op, myType t)
 
 int BinaryOp::genExp ()
 {
-    if (_left->_type != _right->_type)
-      return -1;
   
 	int left_operand_result = _left->genExp ();
 	int right_operand_result = _right->genExp ();
 	
+	if (_left->_type != _right->_type)
+	{
+		int castOperand = newTemp();
+		if(_left->_type == _INT)
+		{
+			emit ("_t%d = static_cast<float> _t%d\n", castOperand, left_operand_result);
+			left_operand_result = castOperand;
+		}
+		else
+		{
+			emit ("_t%d = static_cast<float> _t%d\n", castOperand, right_operand_result);
+			right_operand_result = castOperand;
+		}
+	}
+	
 	int result = newTemp ();
 	
 	const char *the_op = opName (_op, _type);
-
+	
   	emit ("_t%d = _t%d %s _t%d\n", result, left_operand_result, the_op, right_operand_result);
 	return result;
 }
@@ -278,7 +291,15 @@ void AssignStmt::genStmt()
 	myType idtype = _lhs->_type; 
 	
 	if (idtype == _rhs->_type)
-	  emit ("%s = _t%d\n", _lhs->_name, result);
+		emit ("%s = _t%d\n", _lhs->_name, result);
+	else
+	{
+		if(idtype == _INT)
+			emit ("%s = static_cast<int> _t%d\t\twarning: data may lost\n", _lhs->_name, result);
+		else
+			emit ("%s = static_cast<float> _t%d\n", _lhs->_name, result);
+		
+	}
 }
 
 
@@ -326,7 +347,7 @@ void SwitchStmt::genStmt()
 { 
 	int result = _exp->genExp ();
 	
-	if(result == -1)
+	if( _exp->_type != _INT )
 	{
 		errorMsg ("line %d: error - switch expression must have type int\n", _line);
 		return;

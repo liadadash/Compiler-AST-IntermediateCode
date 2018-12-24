@@ -212,9 +212,3 @@ void errorMsg (const char *format, ...)
 	
 	errors++;
 } 
-
-
-
-
-
-
