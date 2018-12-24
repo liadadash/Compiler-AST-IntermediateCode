@@ -316,7 +316,7 @@ void WriteStmt::genStmt()
 void AssignStmt::genStmt()
 {
     int result = _rhs->genExp();
-	
+
 	myType idtype = _lhs->_type; 
 	
 	if (idtype == _rhs->_type)

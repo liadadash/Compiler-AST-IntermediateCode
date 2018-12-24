@@ -72,6 +72,7 @@ int errors;
 %type <for_stmt> for_stmt
 %type <write_stmt> write_stmt
 
+
 %left FAND
 %left OR
 %left AND
@@ -94,7 +95,14 @@ declarations: declarations type ID ';' { if (!(putSymbol ($3, $2)))
              | declarations AUTO ID '=' expression ';' { if (!(putSymbol ($3, $5->_type))) 
 															errorMsg ("line %d: redeclaration of %s\n",
 															@3.first_line, $3); }
-             | /* empty */ ;
+			 | declarations type ID  '=' expression ';' { 	if (!(putSymbol ($3, $2))) 
+																errorMsg ("line %d: redeclaration of %s\n",@3.first_line, $3); 
+															else{
+																AssignStmt* temp = new AssignStmt (new IdNode ($3, @3.first_line),$5, @2.first_line); 
+																temp-> genStmt();
+															}
+														}
+             | /* empty */ ; 
 
 type: INT { $$ = _INT; } |
       FLOAT { $$ = _FLOAT; };			  
