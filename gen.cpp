@@ -28,6 +28,19 @@ int newlabel ()
    return counter++;
 } 
 
+void pushlabel (int label)
+{
+	exitlabels.push(label);
+} 
+
+void poplabel ()
+{
+	if(!exitlabels.empty())
+		exitlabels.pop();
+	else
+		errorMsg ("Error pop exit label\n");
+} 
+
 // emit works just like  printf  --  we use emit 
 // to generate code and print it to the standard output.
 void emit (const char *format, ...)
@@ -83,7 +96,7 @@ int BinaryOp::genExp ()
 {
     if (_left->_type != _right->_type)
       return -1;
-	 	
+  
 	int left_operand_result = _left->genExp ();
 	int right_operand_result = _right->genExp ();
 	
@@ -259,6 +272,8 @@ void WhileStmt::genStmt()
     int condlabel = newlabel ();
 	int exitlabel = newlabel ();
 	
+	pushlabel(exitlabel);
+	
 	emitlabel(condlabel);
 	_condition->genBoolExp (FALL_THROUGH, exitlabel);
 	
@@ -268,7 +283,8 @@ void WhileStmt::genStmt()
 	
 	
 	emit ("goto label%d\n", condlabel);
-	emitlabel(exitlabel);
+	
+	poplabel ();
 }
 
 void Block::genStmt()
@@ -281,15 +297,17 @@ void SwitchStmt::genStmt()
 { 
 	int result = _exp->genExp ();
 	
-	//if(result == -1)
-	//{
-	//	errorMsg ("line %d: bool expression is not INT\n", _line);
-	//	return;
-	//}
-	
+	if(result == -1)
+	{
+		errorMsg ("line %d: error - switch expression must have type int\n", _line);
+		return;
+	}
+
 	int condlabel = newlabel ();
 	int exitlabel = newlabel ();
 	int defaultlabel= newlabel ();
+	
+	pushlabel(exitlabel);
 
 	emit ("goto label%d\n", condlabel);
 	
@@ -324,11 +342,16 @@ void SwitchStmt::genStmt()
 	emit ("case _t%d _t%d label%d\n", result, result, defaultlabel);
 	
 	emitlabel(exitlabel);
+	
+	poplabel ();
 }
 
 void BreakStmt::genStmt()
 {
-	/* not implemented yet; */	
+	if(!exitlabels.empty())
+		emit ("goto label%d\n", exitlabels.top ());
+	else
+	    errorMsg ("line %d. Break not in loop or switch case\n", _line);
 }
 
 void ForStmt::genStmt()
@@ -337,6 +360,8 @@ void ForStmt::genStmt()
 	
     int condlabel = newlabel ();
 	int exitlabel = newlabel ();
+	
+	pushlabel(exitlabel);
 	
 	emitlabel(condlabel);
 	_condition->genBoolExp (FALL_THROUGH, exitlabel);
@@ -347,5 +372,7 @@ void ForStmt::genStmt()
 		
 	emit ("goto label%d\n", condlabel);
 	emitlabel(exitlabel);
+
+	poplabel ();
 }
 

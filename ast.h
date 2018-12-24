@@ -5,11 +5,6 @@
 
 #include "gen.h"
 
-/*
-enum myType { _INT, _FLOAT, UNKNOWN };
-enum op { PLUS = 0, MINUS, MUL, DIV, LT, GT, LE, GE, EQ, NE };
-*/
-
 /*  FALL_THROUGH may be used as an argument to BoolExp::genBoolExp().
     Labels  are represented as positive integers so FALL_THROUGH has negative value */
 const int FALL_THROUGH = -1;
