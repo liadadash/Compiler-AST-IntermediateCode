@@ -71,12 +71,15 @@ struct operator_names {
 	const char *float_name; 
 };
 
+const char* MODULO_OP = "%";
+
 static
 struct operator_names 
 opNames [] = { {"+", "@+"},
             { "-", "@-"},
 			{ "*", "@*" },
-			{ "/", "@/" }};
+			{ "/", "@/" },
+			{ MODULO_OP, MODULO_OP }};
 
 /* convert operator  to  string  suitable for the given type
   e.g. opName (PLUS, _INT)  returns "+"
@@ -85,7 +88,7 @@ opNames [] = { {"+", "@+"},
 const char *
 opName (enum op op, myType t)
 {
-    if (op > DIV) { fprintf (stderr, "internal compiler error #1"); exit (1); }
+    if (op > MODULO) { fprintf (stderr, "internal compiler error #1"); exit (1); }
     if (t == _INT)
 	    return opNames [op].int_name;
 	else
@@ -97,6 +100,16 @@ int BinaryOp::genExp ()
   
 	int left_operand_result = _left->genExp ();
 	int right_operand_result = _right->genExp ();
+
+	const char *the_op = opName (_op, _type);
+	
+	if(*the_op == *MODULO_OP)
+	{
+		if(_left->_type != _INT || _right->_type != _INT){
+			errorMsg ("line %d: error - modulo op must work only on int operands\n", _line);
+			exit(1);
+		}
+	}
 	
 	if (_left->_type != _right->_type)
 	{
@@ -115,9 +128,8 @@ int BinaryOp::genExp ()
 	
 	int result = newTemp ();
 	
-	const char *the_op = opName (_op, _type);
-	
   	emit ("_t%d = _t%d %s _t%d\n", result, left_operand_result, the_op, right_operand_result);
+
 	return result;
 }
 
