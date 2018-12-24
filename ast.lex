@@ -54,6 +54,7 @@ extern int atoi (const char *);
 "break"    { return BREAK; }
 "read"     { return READ;}
 "for"      { return FOR;}
+"auto"     { return AUTO; }
       
 
 [a-zA-Z][A-Za-z_]*  {  strcpy (yylval.name, yytext); return ID; }

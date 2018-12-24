@@ -15,7 +15,6 @@ int errors;
 }
 
 %code requires {
-// #include "gen.h"
 #include "ast.h"
 }
 
@@ -45,6 +44,7 @@ int errors;
    BoolExp *boolexp;
    bool hasBreak;
    ForStmt *for_stmt;
+   WriteStmt *write_stmt;
 }
 
 %token <ival> INT_NUM
@@ -70,6 +70,7 @@ int errors;
 %type <hasBreak> optional_break;
 %type <break_stmt> break_stmt
 %type <for_stmt> for_stmt
+%type <write_stmt> write_stmt
 
 %left FAND
 %left OR
@@ -90,15 +91,17 @@ program    : declarations stmt {
 declarations: declarations type ID ';' { if (!(putSymbol ($3, $2))) 
                                              errorMsg ("line %d: redeclaration of %s\n",
 											            @3.first_line, $3); }
-             | declarations AUTO ID '=' expression ';'
+             | declarations AUTO ID '=' expression ';' { if (!(putSymbol ($3, $5->_type))) 
+															errorMsg ("line %d: redeclaration of %s\n",
+															@3.first_line, $3); }
              | /* empty */ ;
 
 type: INT { $$ = _INT; } |
       FLOAT { $$ = _FLOAT; };			  
 
 stmt       :  assign_stmt { $$ = $1; } |
-              read_stmt { $$ = $1; } |
-              /* write_stmt | */
+              read_stmt   { $$ = $1; } |
+              write_stmt  { $$ = $1; } | 
 			  while_stmt  { $$ = $1; } |
 	          if_stmt     { $$ = $1; } |
 			  for_stmt    { $$ = $1; } |
@@ -109,7 +112,7 @@ stmt       :  assign_stmt { $$ = $1; } |
 read_stmt:    READ '(' ID ')' ';'{ 
                 $$ = new ReadStmt (new IdNode ($3, @3.first_line), @1.first_line); };
 
-/* write_stmt:   WRITE '(' expression ')' ';' ; */
+write_stmt:   WRITE '(' expression ')' ';' ; 
                 
 assign_stmt:  ID '='  expression ';' { $$ = new AssignStmt (new IdNode ($1, @1.first_line),
                                                             $3, @2.first_line); };

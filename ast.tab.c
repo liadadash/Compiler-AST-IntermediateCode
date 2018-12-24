@@ -542,11 +542,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    84,    84,    90,    93,    94,    96,    97,    99,   100,
-     102,   103,   104,   105,   106,   107,   109,   114,   117,   119,
-     121,   124,   128,   132,   134,   136,   136,   138,   140,   148,
-     151,   153,   155,   158,   159,   160,   161,   163,   165,   166,
-     167,   168,   169
+       0,    84,    84,    90,    93,    96,    98,    99,   101,   102,
+     104,   105,   106,   107,   108,   109,   111,   116,   119,   121,
+     123,   126,   130,   134,   136,   138,   138,   140,   142,   150,
+     153,   155,   157,   160,   161,   162,   163,   165,   167,   168,
+     169,   170,   171
 };
 #endif
 
@@ -1641,150 +1641,158 @@ yyreduce:
 											            (yylsp[(3) - (4)]).first_line, (yyvsp[(3) - (4)].name)); }
     break;
 
+  case 4:
+/* Line 1792 of yacc.c  */
+#line 93 "ast.y"
+    { if (!(putSymbol ((yyvsp[(3) - (6)].name), (yyvsp[(5) - (6)].exp)->_type))) 
+															errorMsg ("line %d: redeclaration of %s\n",
+															(yylsp[(3) - (6)]).first_line, (yyvsp[(3) - (6)].name)); }
+    break;
+
   case 6:
 /* Line 1792 of yacc.c  */
-#line 96 "ast.y"
+#line 98 "ast.y"
     { (yyval._type) = _INT; }
     break;
 
   case 7:
 /* Line 1792 of yacc.c  */
-#line 97 "ast.y"
+#line 99 "ast.y"
     { (yyval._type) = _FLOAT; }
     break;
 
   case 8:
 /* Line 1792 of yacc.c  */
-#line 99 "ast.y"
+#line 101 "ast.y"
     { (yyval.stmt) = (yyvsp[(1) - (1)].assign_stmt); }
     break;
 
   case 9:
 /* Line 1792 of yacc.c  */
-#line 100 "ast.y"
+#line 102 "ast.y"
     { (yyval.stmt) = (yyvsp[(1) - (1)].read_stmt); }
     break;
 
   case 10:
 /* Line 1792 of yacc.c  */
-#line 102 "ast.y"
+#line 104 "ast.y"
     { (yyval.stmt) = (yyvsp[(1) - (1)].while_stmt); }
     break;
 
   case 11:
 /* Line 1792 of yacc.c  */
-#line 103 "ast.y"
+#line 105 "ast.y"
     { (yyval.stmt) = (yyvsp[(1) - (1)].if_stmt); }
     break;
 
   case 12:
 /* Line 1792 of yacc.c  */
-#line 104 "ast.y"
+#line 106 "ast.y"
     { (yyval.stmt) = (yyvsp[(1) - (1)].for_stmt); }
     break;
 
   case 13:
 /* Line 1792 of yacc.c  */
-#line 105 "ast.y"
+#line 107 "ast.y"
     { (yyval.stmt) = (yyvsp[(1) - (1)].switch_stmt); }
     break;
 
   case 14:
 /* Line 1792 of yacc.c  */
-#line 106 "ast.y"
+#line 108 "ast.y"
     { (yyval.stmt) = (yyvsp[(1) - (1)].break_stmt); }
     break;
 
   case 15:
 /* Line 1792 of yacc.c  */
-#line 107 "ast.y"
+#line 109 "ast.y"
     { (yyval.stmt) = (yyvsp[(1) - (1)].block); }
     break;
 
   case 16:
 /* Line 1792 of yacc.c  */
-#line 109 "ast.y"
+#line 111 "ast.y"
     { 
                 (yyval.read_stmt) = new ReadStmt (new IdNode ((yyvsp[(3) - (5)].name), (yylsp[(3) - (5)]).first_line), (yylsp[(1) - (5)]).first_line); }
     break;
 
   case 17:
 /* Line 1792 of yacc.c  */
-#line 114 "ast.y"
+#line 116 "ast.y"
     { (yyval.assign_stmt) = new AssignStmt (new IdNode ((yyvsp[(1) - (4)].name), (yylsp[(1) - (4)]).first_line),
                                                             (yyvsp[(3) - (4)].exp), (yylsp[(2) - (4)]).first_line); }
     break;
 
   case 18:
 /* Line 1792 of yacc.c  */
-#line 117 "ast.y"
+#line 119 "ast.y"
     { (yyval.while_stmt) = new WhileStmt ((yyvsp[(3) - (5)].boolexp), (yyvsp[(5) - (5)].stmt)); }
     break;
 
   case 19:
 /* Line 1792 of yacc.c  */
-#line 119 "ast.y"
+#line 121 "ast.y"
     { (yyval.if_stmt) = new IfStmt ((yyvsp[(3) - (7)].boolexp), (yyvsp[(5) - (7)].stmt), (yyvsp[(7) - (7)].stmt)); }
     break;
 
   case 20:
 /* Line 1792 of yacc.c  */
-#line 121 "ast.y"
+#line 123 "ast.y"
     { (yyval.for_stmt) = new ForStmt ((yyvsp[(3) - (8)].assign_stmt), (yyvsp[(4) - (8)].boolexp), (yyvsp[(8) - (8)].stmt), (yyvsp[(6) - (8)].assign_stmt)); }
     break;
 
   case 21:
 /* Line 1792 of yacc.c  */
-#line 124 "ast.y"
+#line 126 "ast.y"
     { (yyval.switch_stmt) = new SwitchStmt ((yyvsp[(3) - (10)].exp), (yyvsp[(6) - (10)].caselist), (yyvsp[(9) - (10)].stmt), (yylsp[(1) - (10)]).first_line); }
     break;
 
   case 22:
 /* Line 1792 of yacc.c  */
-#line 128 "ast.y"
+#line 130 "ast.y"
     { (yyvsp[(1) - (2)].mycase)->_next = (yyvsp[(2) - (2)].caselist);   
                            (yyval.caselist) = (yyvsp[(1) - (2)].mycase); }
     break;
 
   case 23:
 /* Line 1792 of yacc.c  */
-#line 132 "ast.y"
+#line 134 "ast.y"
     { (yyval.caselist) = (yyvsp[(1) - (1)].mycase);}
     break;
 
   case 24:
 /* Line 1792 of yacc.c  */
-#line 134 "ast.y"
+#line 136 "ast.y"
     { (yyval.mycase) = new Case ((yyvsp[(2) - (5)].ival), (yyvsp[(4) - (5)].stmt), (yyvsp[(5) - (5)].hasBreak)); }
     break;
 
   case 25:
 /* Line 1792 of yacc.c  */
-#line 136 "ast.y"
+#line 138 "ast.y"
     { (yyval.hasBreak) = true; }
     break;
 
   case 26:
 /* Line 1792 of yacc.c  */
-#line 136 "ast.y"
+#line 138 "ast.y"
     { (yyval.hasBreak) = false; }
     break;
 
   case 27:
 /* Line 1792 of yacc.c  */
-#line 138 "ast.y"
+#line 140 "ast.y"
     { (yyval.break_stmt) = new BreakStmt ((yylsp[(1) - (2)]).first_line); }
     break;
 
   case 28:
 /* Line 1792 of yacc.c  */
-#line 140 "ast.y"
+#line 142 "ast.y"
     { (yyval.block) = new Block ((yyvsp[(2) - (3)].stmtlist)); }
     break;
 
   case 29:
 /* Line 1792 of yacc.c  */
-#line 148 "ast.y"
+#line 150 "ast.y"
     {  (yyvsp[(1) - (2)].stmt)->_next = (yyvsp[(2) - (2)].stmtlist);  // also works when $2 is NULL
                             (yyval.stmtlist) = (yyvsp[(1) - (2)].stmt);  
 						 }
@@ -1792,87 +1800,87 @@ yyreduce:
 
   case 30:
 /* Line 1792 of yacc.c  */
-#line 151 "ast.y"
+#line 153 "ast.y"
     { (yyval.stmtlist) = NULL; }
     break;
 
   case 31:
-/* Line 1792 of yacc.c  */
-#line 153 "ast.y"
-    {
-                  (yyval.exp) = new BinaryOp ((yyvsp[(2) - (3)].op), (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp), (yylsp[(2) - (3)]).first_line); }
-    break;
-
-  case 32:
 /* Line 1792 of yacc.c  */
 #line 155 "ast.y"
     {
                   (yyval.exp) = new BinaryOp ((yyvsp[(2) - (3)].op), (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp), (yylsp[(2) - (3)]).first_line); }
     break;
 
+  case 32:
+/* Line 1792 of yacc.c  */
+#line 157 "ast.y"
+    {
+                  (yyval.exp) = new BinaryOp ((yyvsp[(2) - (3)].op), (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp), (yylsp[(2) - (3)]).first_line); }
+    break;
+
   case 33:
 /* Line 1792 of yacc.c  */
-#line 158 "ast.y"
+#line 160 "ast.y"
     { (yyval.exp) = (yyvsp[(2) - (3)].exp); }
     break;
 
   case 34:
 /* Line 1792 of yacc.c  */
-#line 159 "ast.y"
+#line 161 "ast.y"
     { (yyval.exp) = new IdNode ((yyvsp[(1) - (1)].name), (yylsp[(1) - (1)]).first_line);}
     break;
 
   case 35:
 /* Line 1792 of yacc.c  */
-#line 160 "ast.y"
+#line 162 "ast.y"
     { (yyval.exp) = new NumNode ((yyvsp[(1) - (1)].ival)); }
     break;
 
   case 36:
 /* Line 1792 of yacc.c  */
-#line 161 "ast.y"
+#line 163 "ast.y"
     { (yyval.exp) = new NumNode ((yyvsp[(1) - (1)].fval)); }
     break;
 
   case 37:
 /* Line 1792 of yacc.c  */
-#line 163 "ast.y"
+#line 165 "ast.y"
     { (yyval.boolexp) = new SimpleBoolExp ((yyvsp[(2) - (3)].op), (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp)); }
     break;
 
   case 38:
 /* Line 1792 of yacc.c  */
-#line 165 "ast.y"
+#line 167 "ast.y"
     { (yyval.boolexp) = new Or ((yyvsp[(1) - (3)].boolexp), (yyvsp[(3) - (3)].boolexp)); }
     break;
 
   case 39:
 /* Line 1792 of yacc.c  */
-#line 166 "ast.y"
+#line 168 "ast.y"
     { (yyval.boolexp) = new And ((yyvsp[(1) - (3)].boolexp), (yyvsp[(3) - (3)].boolexp)); }
     break;
 
   case 40:
 /* Line 1792 of yacc.c  */
-#line 167 "ast.y"
+#line 169 "ast.y"
     { (yyval.boolexp) = new Fand ((yyvsp[(1) - (3)].boolexp), (yyvsp[(3) - (3)].boolexp)); }
     break;
 
   case 41:
 /* Line 1792 of yacc.c  */
-#line 168 "ast.y"
+#line 170 "ast.y"
     { (yyval.boolexp) = new Not ((yyvsp[(3) - (4)].boolexp)); }
     break;
 
   case 42:
 /* Line 1792 of yacc.c  */
-#line 169 "ast.y"
+#line 171 "ast.y"
     { (yyval.boolexp) = (yyvsp[(2) - (3)].boolexp);}
     break;
 
 
 /* Line 1792 of yacc.c  */
-#line 1876 "ast.tab.c"
+#line 1884 "ast.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2111,7 +2119,7 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 172 "ast.y"
+#line 174 "ast.y"
 
 main (int argc, char **argv)
 {
