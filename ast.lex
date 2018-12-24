@@ -22,6 +22,7 @@ extern int atoi (const char *);
 
 [\n\t ]+   /* skip white space */
 
+"**"       { yylval.op = POW; return MULOP;}
 "+"        { yylval.op = PLUS; return ADDOP;}
 "-"        { yylval.op = MINUS; return ADDOP;}
 "*"        { yylval.op = MUL; return MULOP; }

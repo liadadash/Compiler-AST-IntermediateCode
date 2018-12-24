@@ -6,6 +6,7 @@
 #include "ast.h"
 #include "symtab.h"
 
+
 /*    This stack is used to implement  break statements.
       "break"  is implemented as a goto to the exit label of the most closely enclosing loop (or switch statement). 
       This label is the top of the stack. Below it on the stack is the exit label of the enclosing loop and so on.
@@ -72,6 +73,7 @@ struct operator_names {
 };
 
 const char* MODULO_OP = "%";
+const char* POW_OP = "power";
 
 static
 struct operator_names 
@@ -79,6 +81,7 @@ opNames [] = { {"+", "@+"},
             { "-", "@-"},
 			{ "*", "@*" },
 			{ "/", "@/" },
+			{ POW_OP, POW_OP },
 			{ MODULO_OP, MODULO_OP }};
 
 /* convert operator  to  string  suitable for the given type
@@ -103,10 +106,13 @@ int BinaryOp::genExp ()
 
 	const char *the_op = opName (_op, _type);
 	
-	if(*the_op == *MODULO_OP)
+	if(strcmp(the_op, MODULO_OP) == 0 || strcmp(the_op, POW_OP) == 0)
 	{
 		if(_left->_type != _INT || _right->_type != _INT){
-			errorMsg ("line %d: error - modulo op must work only on int operands\n", _line);
+			if(strcmp(the_op, MODULO_OP) == 0 )
+				errorMsg ("line %d: error - modulo op must work only on int operands\n", _line);
+			else
+				errorMsg ("line %d: error - pow op must work only on int operands\n", _line);
 			exit(1);
 		}
 	}
