@@ -23,14 +23,12 @@ public:
 	//  For example, return value 17  means result will be stored in _t17
     virtual int genExp () = 0; // every subclass should override this (or be abstract too)
     
-    Exp () { /*_result = -1;*/ _type = UNKNOWN; }	
+    Exp () { _result = -1; _type = UNKNOWN; }	
     // Exp (int result, myType _type) : ASTnode () { this->_result = result; this->_type = _type; }
-#if 0
-    //  _result field no longer used.  Instead, return value of genExp() is used  
+	
     int _result;/* example: _result is 17 means result of expression will be in  _t17.
                    _result is -1 means: not known yet (_result is set to a new temporary when
 				    code for the expression is generated) */
-#endif
 	myType _type;
     
 };
@@ -155,6 +153,16 @@ public:
       void genStmt (); // override	  
 
       IdNode *_id;  // note: IdNode is subclass of Exp but this IdNode is not really an expression
+	  int _line; // line in source code 
+};
+
+class WriteStmt: public Stmt {
+public:
+      WriteStmt (Exp *exp, int line) : Stmt() { _exp = exp; _line = line;};
+
+      void genStmt (); // override	  
+
+      Exp *_exp;
 	  int _line; // line in source code 
 };
 

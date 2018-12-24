@@ -43,12 +43,11 @@ extern int yydebug;
 /* Line 2058 of yacc.c  */
 #line 17 "ast.y"
 
-// #include "gen.h"
 #include "ast.h"
 
 
 /* Line 2058 of yacc.c  */
-#line 52 "ast.tab.h"
+#line 51 "ast.tab.h"
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
@@ -87,7 +86,7 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 2058 of yacc.c  */
-#line 23 "ast.y"
+#line 22 "ast.y"
 
    int ival;
    // float numbers in the source program are stored as double
@@ -113,6 +112,7 @@ typedef union YYSTYPE
    BoolExp *boolexp;
    bool hasBreak;
    ForStmt *for_stmt;
+   WriteStmt *write_stmt;
 
 
 /* Line 2058 of yacc.c  */

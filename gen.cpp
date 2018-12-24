@@ -126,29 +126,29 @@ int BinaryOp::genExp ()
 		}
 	}
 	
-	int result = newTemp ();
+	_result = newTemp ();
 	
-  	emit ("_t%d = _t%d %s _t%d\n", result, left_operand_result, the_op, right_operand_result);
+  	emit ("_t%d = _t%d %s _t%d\n", _result, left_operand_result, the_op, right_operand_result);
 
-	return result;
+	return _result;
 }
 
 int NumNode::genExp () 
 {
-    int result = newTemp ();
+    _result = newTemp ();
 	if (_type == _INT)
-  	    emit ("_t%d = %d\n", result, _u.ival);
+  	    emit ("_t%d = %d\n", _result, _u.ival);
 	else
-	    emit ("_t%d = %.2f\n", result, _u.fval);
-	return result;
+	    emit ("_t%d = %.2f\n", _result, _u.fval);
+	return _result;
 }
 
 int IdNode::genExp ()
 {
-    int result = newTemp ();
+    _result = newTemp ();
 		
-	emit ("_t%d = %s\n", result, _name);
-	return result;
+	emit ("_t%d = %s\n", _result, _name);
+	return _result;
 }
 
 void SimpleBoolExp::genBoolExp (int truelabel, int falselabel)
@@ -294,6 +294,17 @@ void ReadStmt::genStmt()
  	  emit ("iread %s\n", _id->_name);
     else
       emit ("fread %s\n", _id->_name);
+}
+
+void WriteStmt::genStmt()
+{
+	_exp-> genExp();
+	myType exptype = _exp->_type; 
+	
+	if (exptype == _INT)
+ 	  emit ("iwrite _t%d\n", _exp->_result);
+    else
+      emit ("fwrite _t%d\n", _exp->_result);
 }
 
 void AssignStmt::genStmt()

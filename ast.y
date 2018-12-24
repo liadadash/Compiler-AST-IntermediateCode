@@ -112,7 +112,7 @@ stmt       :  assign_stmt { $$ = $1; } |
 read_stmt:    READ '(' ID ')' ';'{ 
                 $$ = new ReadStmt (new IdNode ($3, @3.first_line), @1.first_line); };
 
-write_stmt:   WRITE '(' expression ')' ';' ; 
+write_stmt:   WRITE '(' expression ')' ';' { $$ = new WriteStmt ($3, @1.first_line); }; 
                 
 assign_stmt:  ID '='  expression ';' { $$ = new AssignStmt (new IdNode ($1, @1.first_line),
                                                             $3, @2.first_line); };
