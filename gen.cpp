@@ -232,6 +232,35 @@ void Not::genBoolExp (int truelabel, int falselabel)
     _operand->genBoolExp (falselabel, truelabel); 
 }
 
+void Fand::genBoolExp (int truelabel, int falselabel)
+{
+    if (truelabel == FALL_THROUGH && falselabel == FALL_THROUGH)
+	    return; // no need for code 
+	
+	if  (truelabel == FALL_THROUGH) {
+	    _left->genBoolExp (falselabel, // if left operand is true then the FAND expression is
+                                        // false so jump to falselabel);
+                           FALL_THROUGH); // if left operand is false then fall through and evaluate
+		                                 // right operand.
+        _right->genBoolExp (falselabel, FALL_THROUGH);
+    } else if (falselabel == FALL_THROUGH) {
+	    int next_label = newlabel(); // FALL_THROUGH implemented by jumping to next_label
+        _left->genBoolExp (next_label, // if left operand is true then the FAND expression 
+                                        //  is false so jump to next_label (thus falling through to
+                                        // the code following the code for the FAND expression)
+                           FALL_THROUGH); // if left operand is false then fall through and
+                                         // evaluate right operand
+        _right->genBoolExp (FALL_THROUGH, truelabel);
+		emitlabel(next_label);
+    } else { // no fall through
+        _left->genBoolExp (falselabel,  // if left operand is true then the FAND expression is true
+						                // so jump to false label (without evaluating the right operand)
+						   FALL_THROUGH);// if left operand is false then fall through and
+                                         // evaluate right operand
+		_right->genBoolExp (falselabel, truelabel);
+	}
+}
+
 void ReadStmt::genStmt()
 {
 	myType idtype = _id->_type; 
@@ -283,7 +312,7 @@ void WhileStmt::genStmt()
 	
 	
 	emit ("goto label%d\n", condlabel);
-	
+	emitlabel (exitlabel);
 	poplabel ();
 }
 

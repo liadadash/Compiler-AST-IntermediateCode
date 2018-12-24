@@ -127,6 +127,15 @@ public:
 	 BoolExp *_operand; 
 };
 
+class Fand : public BoolExp {
+public:
+     Fand (BoolExp *left, BoolExp *right) { _left = left; _right = right; }
+	 void genBoolExp (int truelabel, int falselabel); // override
+	 
+	 BoolExp *_left; // left operand
+	 BoolExp *_right; // right operand
+};
+
 	 // statements
 
 // this is an abstract class

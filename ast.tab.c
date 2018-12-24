@@ -1855,7 +1855,7 @@ yyreduce:
   case 40:
 /* Line 1792 of yacc.c  */
 #line 167 "ast.y"
-    { (yyval.boolexp) = 0; /* not implemented yet */ }
+    { (yyval.boolexp) = new Fand ((yyvsp[(1) - (3)].boolexp), (yyvsp[(3) - (3)].boolexp)); }
     break;
 
   case 41:
