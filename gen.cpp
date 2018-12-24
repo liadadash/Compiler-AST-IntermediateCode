@@ -384,7 +384,7 @@ void SwitchStmt::genStmt()
 
 	int condlabel = newlabel ();
 	int exitlabel = newlabel ();
-	int defaultlabel= newlabel ();
+	int defaultlabel = newlabel ();
 	
 	pushlabel(exitlabel);
 
