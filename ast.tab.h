@@ -60,24 +60,25 @@ extern int yydebug;
      ADDOP = 260,
      MULOP = 261,
      RELOP = 262,
-     ID = 263,
-     AUTO = 264,
-     READ = 265,
-     WRITE = 266,
-     IF = 267,
-     ELSE = 268,
-     WHILE = 269,
-     FOR = 270,
-     INT = 271,
-     FLOAT = 272,
-     OR = 273,
-     AND = 274,
-     NOT = 275,
-     FAND = 276,
-     SWITCH = 277,
-     CASE = 278,
-     DEFAULT = 279,
-     BREAK = 280
+     POWER = 263,
+     ID = 264,
+     AUTO = 265,
+     READ = 266,
+     WRITE = 267,
+     IF = 268,
+     ELSE = 269,
+     WHILE = 270,
+     FOR = 271,
+     INT = 272,
+     FLOAT = 273,
+     OR = 274,
+     AND = 275,
+     NOT = 276,
+     FAND = 277,
+     SWITCH = 278,
+     CASE = 279,
+     DEFAULT = 280,
+     BREAK = 281
    };
 #endif
 
@@ -116,7 +117,7 @@ typedef union YYSTYPE
 
 
 /* Line 2058 of yacc.c  */
-#line 120 "ast.tab.h"
+#line 121 "ast.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

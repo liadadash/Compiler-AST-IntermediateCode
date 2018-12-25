@@ -49,7 +49,7 @@ int errors;
 
 %token <ival> INT_NUM
 %token <fval> FLOAT_NUM
-%token <op> ADDOP MULOP RELOP
+%token <op> ADDOP MULOP RELOP POWER
 %token <name> ID
 
 %token AUTO READ WRITE IF ELSE WHILE  FOR INT FLOAT OR AND NOT FAND SWITCH CASE DEFAULT BREAK
@@ -78,7 +78,7 @@ int errors;
 %left AND
 %left ADDOP
 %left MULOP
-
+%right POWER
 
 %error-verbose
 
@@ -94,13 +94,13 @@ declarations: declarations type ID ';' { if (!(putSymbol ($3, $2)))
 											            @3.first_line, $3); }
              | declarations AUTO ID '=' expression ';' { if (!(putSymbol ($3, $5->_type))) 
 															errorMsg ("line %d: redeclaration of %s\n",
-															@3.first_line, $3); }
+															@3.first_line, $3);
+															AssignStmt (new IdNode ($3, @3.first_line),$5, @2.first_line).genStmt();
+														}
 			 | declarations type ID  '=' expression ';' { 	if (!(putSymbol ($3, $2))) 
 																errorMsg ("line %d: redeclaration of %s\n",@3.first_line, $3); 
-															else{
-																AssignStmt* temp = new AssignStmt (new IdNode ($3, @3.first_line),$5, @2.first_line); 
-																temp-> genStmt();
-															}
+															else
+																AssignStmt (new IdNode ($3, @3.first_line),$5, @2.first_line).genStmt();
 														}
              | /* empty */ ; 
 
@@ -164,6 +164,8 @@ stmtlist:  /* empty */ { $$ = NULL; };
 expression : expression ADDOP expression {
                   $$ = new BinaryOp ($2, $1, $3, @2.first_line); } |
 		     expression MULOP expression {
+                  $$ = new BinaryOp ($2, $1, $3, @2.first_line); } |
+			 expression POWER expression {
                   $$ = new BinaryOp ($2, $1, $3, @2.first_line); };
 
 expression: '(' expression ')' { $$ = $2; } |

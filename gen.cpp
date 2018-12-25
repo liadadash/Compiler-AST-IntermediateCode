@@ -72,17 +72,14 @@ struct operator_names {
 	const char *float_name; 
 };
 
-const char* MODULO_OP = "%";
-const char* POW_OP = "power";
-
 static
 struct operator_names 
 opNames [] = { {"+", "@+"},
             { "-", "@-"},
 			{ "*", "@*" },
 			{ "/", "@/" },
-			{ POW_OP, POW_OP },
-			{ MODULO_OP, MODULO_OP }};
+			{ "power", "@power" },
+			{ "%", "@%" }};
 
 /* convert operator  to  string  suitable for the given type
   e.g. opName (PLUS, _INT)  returns "+"
@@ -103,19 +100,19 @@ int BinaryOp::genExp ()
   
 	int left_operand_result = _left->genExp ();
 	int right_operand_result = _right->genExp ();
-
-	const char *the_op = opName (_op, _type);
 	
-	if(strcmp(the_op, MODULO_OP) == 0 || strcmp(the_op, POW_OP) == 0)
+	if(_op == MODULO || _op == POW )
 	{
 		if(_left->_type != _INT || _right->_type != _INT){
-			if(strcmp(the_op, MODULO_OP) == 0 )
+			if( _op == MODULO )
 				errorMsg ("line %d: error - modulo op must work only on int operands\n", _line);
 			else
 				errorMsg ("line %d: error - pow op must work only on int operands\n", _line);
 			exit(1);
 		}
 	}
+	
+	const char *the_op = opName (_op, _type);
 	
 	if (_left->_type != _right->_type)
 	{
@@ -304,6 +301,8 @@ void ReadStmt::genStmt()
 
 void WriteStmt::genStmt()
 {
+	if(_exp->_type != _INT && _exp->_type != _FLOAT)
+        errorMsg("line %d: error: var type undefined.\n",_line);
 	_exp-> genExp();
 	myType exptype = _exp->_type; 
 	
