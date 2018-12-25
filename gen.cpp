@@ -79,7 +79,7 @@ opNames [] = { {"+", "@+"},
 			{ "*", "@*" },
 			{ "/", "@/" },
 			{ "power", "@power" },
-			{ "%", "@%" }};
+			{ "%"}};
 
 /* convert operator  to  string  suitable for the given type
   e.g. opName (PLUS, _INT)  returns "+"
@@ -89,6 +89,8 @@ const char *
 opName (enum op op, myType t)
 {
     if (op > MODULO) { fprintf (stderr, "internal compiler error #1"); exit (1); }
+	if (op == MODULO)
+		return opNames [op].int_name;
     if (t == _INT)
 	    return opNames [op].int_name;
 	else
@@ -101,13 +103,10 @@ int BinaryOp::genExp ()
 	int left_operand_result = _left->genExp ();
 	int right_operand_result = _right->genExp ();
 	
-	if(_op == MODULO || _op == POW )
+	if( _op == MODULO )
 	{
 		if(_left->_type != _INT || _right->_type != _INT){
-			if( _op == MODULO )
-				errorMsg ("line %d: error - modulo op must work only on int operands\n", _line);
-			else
-				errorMsg ("line %d: error - pow op must work only on int operands\n", _line);
+			errorMsg ("line %d: error - modulo op must work only on int operands\n", _line);
 			exit(1);
 		}
 	}
