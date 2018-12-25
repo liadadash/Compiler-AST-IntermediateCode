@@ -1637,9 +1637,9 @@ yyreduce:
 /* Line 1792 of yacc.c  */
 #line 86 "ast.y"
     { 
-                     /* if (errors == 0) { for debugging: generate code even if errors found */
+                      if (errors == 0) { /* for debugging: generate code even if errors found */
 					     (yyvsp[(2) - (2)].stmt)->genStmt (); emit ("halt"); 
-						 /*} */
+						 } 
 				     }
     break;
 

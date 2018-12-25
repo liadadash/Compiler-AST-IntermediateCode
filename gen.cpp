@@ -105,10 +105,8 @@ int BinaryOp::genExp ()
 	
 	if( _op == MODULO )
 	{
-		if(_left->_type != _INT || _right->_type != _INT){
+		if(_left->_type != _INT || _right->_type != _INT)
 			errorMsg ("line %d: error - modulo op must work only on int operands\n", _line);
-			exit(1);
-		}
 	}
 	
 	const char *the_op = opName (_op, _type);
@@ -321,8 +319,10 @@ void AssignStmt::genStmt()
 		emit ("%s = _t%d\n", _lhs->_name, result);
 	else
 	{
-		if(idtype == _INT)
-			emit ("%s = static_cast<int> _t%d\t\twarning: data may lost\n", _lhs->_name, result);
+		if(idtype == _INT){
+			emit ("%s = static_cast<int> _t%d", _lhs->_name, result);
+			fprintf (stderr, " \tline:%d warning: data may lost\n",_line);
+		}
 		else
 			emit ("%s = static_cast<float> _t%d\n", _lhs->_name, result);
 		
@@ -375,10 +375,7 @@ void SwitchStmt::genStmt()
 	int result = _exp->genExp ();
 	
 	if( _exp->_type != _INT )
-	{
 		errorMsg ("line %d: error - switch expression must have type int\n", _line);
-		return;
-	}
 
 	int condlabel = newlabel ();
 	int exitlabel = newlabel ();

@@ -84,9 +84,9 @@ int errors;
 
 %%
 program    : declarations stmt { 
-                     /* if (errors == 0) { for debugging: generate code even if errors found */
+                      if (errors == 0) { /* for debugging: generate code even if errors found */
 					     $2->genStmt (); emit ("halt"); 
-						 /*} */
+						 } 
 				     }
 
 declarations: declarations type ID ';' { if (!(putSymbol ($3, $2))) 
